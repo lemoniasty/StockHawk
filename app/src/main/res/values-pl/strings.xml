@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
+    <string name="app_name">Stock Hawk</string>
+    <string name="absolute_price_change_content_description">Absolutna zmiana ceny <xliff:g example="+$0.08" id="change">%1$s</xliff:g></string>
+    <string name="action_button_change_units_absolute">Przełącz na cenę absolutną</string>
+    <string name="action_button_change_units_percentage">Przełącz na procentową zmianę ceny</string>
+    <string name="action_change_units">Przełącz jednostki wyrażenia zmian ceny</string>
+    <string name="add_stock_content_description">Dodaj akcje</string>
+    <string name="dialog_add">Dodaj</string>
+    <string name="dialog_cancel">Anuluj</string>
+    <string name="dialog_hint">Symbol (np. GOOG)</string>
+    <string name="dialog_title">Dodaj Akcje</string>
+    <string name="error_message_invalid_quote">Wybrany walor jest niedostępny</string>
+    <string name="error_no_network">Brak połączenia z internetem. Dane zostaną odświeżone po połączeniu z siecią.</string>
+    <string name="error_no_stocks">Nie dodano żadnego waloru. Kliknij przycisk \"+\" aby dodać pierwszy walor.</string>
+    <string name="last_synchronization_info">Ostatnia synchronizacja: <xliff:g example="2017-04-09 18:05:00" id="synchronization">%1$s</xliff:g></string>
+    <string name="last_synchronization_never">Nigdy</string>
+    <string name="percentage_price_change_content_description">Procentowa zmiana ceny: <xliff:g example="+0.22%" id="change">%1$s</xliff:g></string>
+    <string name="price_change_content_description">Zmiana ceny: <xliff:g example="+0.22%" id="change">%1$s</xliff:g></string>
+    <string name="price_content_description">Cena: <xliff:g example="$33.76" id="price">%1$s</xliff:g></string>
+    <string name="symbol_content_description">Symbol waloru: <xliff:g example="GOOGL" id="symbol">%1$s</xliff:g></string>
+    <string name="toast_no_connectivity">Dane zostaną odświeżone po połączeniu z internetem</string>
+    <string name="toast_stock_added_no_connectivity">Walor %s został dodany. Zostanie on dodany kiedy użądzenie zostanie podłączone do internetu.</string>
+    <string name="widget_empty_message">Proszę wybrać pierwszą firmę</string>
+    <string name="widget_title">Twoje walory</string>
+    <string name="error_stock_symbol_invalid">Symbol waloru (<xliff:g example="GOOGL" id="symbol">%1$s</xliff:g>) jest nieprawidłowy!</string>
+</resources>

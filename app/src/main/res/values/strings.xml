@@ -1,35 +1,57 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
     <string name="app_name">Stock Hawk</string>
 
+    <!-- Preferences area -->
     <string name="pref_stocks_initialized_key" translatable="false">initialized</string>
+    <string name="pref_stocks_key" translatable="false">stocks</string>
+    <string name="pref_display_mode_key" translatable="false">displayMode</string>
+    <string name="pref_display_mode_default" translatable="false">@string/pref_display_mode_percentage_key</string>
+    <string name="pref_display_mode_absolute_key" translatable="false">absolute</string>
+    <string name="pref_display_mode_percentage_key" translatable="false">percentage</string>
 
-    <string name="pref_stocks_key">stocks</string>
+    <!-- Stores information about last synchronization time -->
+    <string name="pref_last_sync_time_key" translatable="false">last_sync</string>
 
+    <!-- Default stocks -->
+    <string name="default_stocks_yahoo" translatable="false">YHOO</string>
+    <string name="default_stocks_apple" translatable="false">AAPL</string>
+    <string name="default_stocks_microsoft" translatable="false">MSFT</string>
+    <string name="default_stocks_facebook" translatable="false">FB</string>
 
-    <string name="pref_display_mode_key">displayMode</string>
-    <string name="pref_display_mode_default">@string/pref_display_mode_percentage_key</string>
-
-    <string name="pref_display_mode_absolute_key">absolute</string>
-    <string name="pref_display_mode_percentage_key">percentage</string>
-
-    <string name="default_stocks_yahoo">YHOO</string>
-    <string name="default_stocks_apple">AAPL</string>
-    <string name="default_stocks_microsoft">MSFT</string>
-    <string name="default_stocks_facebook">FB</string>
-
-
-    <string name="action_change_units">@string/pref_display_mode_key</string>
-
-
+    <!-- Add stock action dialog -->
     <string name="dialog_title">Add Stock</string>
     <string name="dialog_hint">Symbol (e.g. GOOG)</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_add">Add</string>
 
+    <!-- Content descriptions -->
+    <string name="action_button_change_units_absolute">Switch to absolute unit of quotation price change.</string>
+    <string name="action_button_change_units_percentage">Switch to percentage unit of quotation price change.</string>
+    <string name="add_stock_content_description">Add stock</string>
+
+    <string name="price_content_description">Price: <xliff:g example="$33.76" id="price">%1$s</xliff:g></string>
+    <string name="symbol_content_description">Quotation symbol: <xliff:g example="GOOGL" id="symbol">%1$s</xliff:g></string>
+    <string name="price_change_content_description">Price change: <xliff:g example="+$0.08" id="change">%1$s</xliff:g></string>
+    <string name="absolute_price_change_content_description">Absolute price change: <xliff:g example="+$0.08" id="change">%1$s</xliff:g></string>
+    <string name="percentage_price_change_content_description">Percentage price change: <xliff:g example="+0.22%" id="change">%1$s</xliff:g></string>
+
+    <!-- Errors area -->
     <string name="error_no_network">No network connectivity! Will load stock cursor when the network is available.</string>
     <string name="error_no_stocks">No stocks added! Hit the floating action button to add one.</string>
-
+    <string name="error_stock_symbol_invalid">Provided stock symbol (<xliff:g example="GOOGL" id="symbol">%1$s</xliff:g>) was invalid.</string>
+    <string name="error_message_invalid_quote">Selected quote is not available.</string>
     <string name="toast_stock_added_no_connectivity">Symbol %s added. Will refresh when network available.</string>
     <string name="toast_no_connectivity">Will refresh when network available.</string>
 
+    <!-- Widget area -->
+    <string name="widget_title">Your quotes</string>
+    <string name="widget_empty_message">Please add a first company.</string>
+
+    <!-- UI -->
+    <string name="action_change_units">Toggle a unit of quotation price change</string>
+    <string name="last_synchronization_never">Never</string>
+    <string name="last_synchronization_info">Last synchronization: <xliff:g example="2017-04-09 18:05:00" id="synchronization">%1$s</xliff:g></string>
+
+    <!-- Shared element transition name - For price element -->
+    <string name="transition_name_price" translatable="false">transition_price</string>
 </resources>

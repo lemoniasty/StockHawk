@@ -5,10 +5,13 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.udacity.stockhawk.R;
+import com.udacity.stockhawk.Utility;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public final class PrefUtils {
 
@@ -39,7 +42,7 @@ public final class PrefUtils {
 
     private static void editStockPref(Context context, String symbol, Boolean add) {
         String key = context.getString(R.string.pref_stocks_key);
-        Set<String> stocks = getStocks(context);
+        Set<String> stocks = new HashSet<>(getStocks(context));
 
         if (add) {
             stocks.add(symbol);
@@ -86,6 +89,69 @@ public final class PrefUtils {
         }
 
         editor.apply();
+    }
+
+    /**
+     * Update a value of last sync time.
+     * This value is updated after each successful synchronization.
+     * By having this value, we can determine if data is fresh or not.
+     *
+     * @param context of the application
+     */
+    public static void updateSyncTime(Context context) {
+        String key = context.getString(R.string.pref_last_sync_time_key);
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putLong(key, System.currentTimeMillis());
+        editor.apply();
+    }
+
+    /**
+     * Fetch a formatted last synchronization time.
+     *
+     * @param context of the application
+     * @return formatted string which contain last synchronization time.
+     */
+    public static String getLastSyncTime(Context context) {
+        String key = context.getString(R.string.pref_last_sync_time_key);
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        long timestamp = sp.getLong(key, 0);
+
+        String lastSyncDate = context.getString(R.string.last_synchronization_never);
+        if (timestamp != 0) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(timestamp);
+            lastSyncDate = Utility.formatDate(calendar, "yyyy-MM-dd HH:mm:ss");
+        }
+
+        return context.getString(R.string.last_synchronization_info, lastSyncDate);
+    }
+
+    /**
+     * Determine if data stored in database are fresh or not.
+     * Fresh data is considered as a fresh when they was collected no later than one hour ago.
+     *
+     * @param context of the application
+     * @return flag whether data is fresh or not
+     */
+    public static boolean showLastSynchronizationInfo(Context context) {
+        // Well if we don't have any added stocks, data can't be outdated ;)
+        if (PrefUtils.getStocks(context).size() == 0) {
+            return false;
+        }
+
+        String key = context.getString(R.string.pref_last_sync_time_key);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        long timestamp = sp.getLong(key, 0);
+
+        if (timestamp == 0) {
+            return true;
+        }
+
+        long timeDiff = System.currentTimeMillis() - timestamp;
+        return timeDiff > TimeUnit.HOURS.toMillis(1);
     }
 
 }

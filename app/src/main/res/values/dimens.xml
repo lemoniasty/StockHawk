@@ -1,3 +1,13 @@
 <resources>
-    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin">8dp</dimen>
+
+    <!-- Cards section -->
+    <dimen name="card_margin_top">8dp</dimen>
+    <dimen name="chart_card_height">150dp</dimen>
+
+    <!-- Widget section -->
+    <dimen name="widget_min_width">250dp</dimen>
+    <dimen name="widget_min_height">110dp</dimen>
+    <dimen name="widget_default_width">@dimen/widget_min_width</dimen>
+    <dimen name="widget_default_height">@dimen/widget_min_height</dimen>
 </resources>

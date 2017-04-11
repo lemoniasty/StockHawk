@@ -1,9 +1,20 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowContentTransitions">true</item>
+
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Main" parent="@style/AppTheme">
+
+    </style>
+
+    <style name="AppTheme.Details" parent="@style/AppTheme">
+        <item name="android:windowEnterTransition">@transition/details_enter_transition</item>
+        <item name="android:windowExitTransition">@transition/details_exit_transition</item>
     </style>
 
     <style name="PercentChangeTextStyle">
@@ -13,10 +24,12 @@
     </style>
 
     <style name="BidPriceTextStyle">
+        <item name="android:textColor">@color/secondaryText</item>
         <item name="android:textSize">20sp</item>
     </style>
 
     <style name="StockSymbolTextStyle">
+        <item name="android:textColor">@color/primaryText</item>
         <item name="android:textSize">25sp</item>
         <item name="android:textAllCaps">true</item>
     </style>
