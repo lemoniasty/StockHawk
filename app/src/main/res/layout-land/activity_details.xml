@@ -31,7 +31,7 @@
                 android:textColor="@color/material_green_700"
                 android:transitionName="@string/transition_name_price"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="811.98" />
 
@@ -42,7 +42,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                 android:textColor="@color/material_green_700"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tv_price"
-                app:layout_constraintLeft_toLeftOf="@+id/tv_change_percentage"
+                app:layout_constraintStart_toStartOf="@+id/tv_change_percentage"
                 tools:text="+9.95" />
 
             <TextView
@@ -54,7 +54,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                 android:textColor="@color/material_red_700"
                 app:layout_constraintBottom_toTopOf="@+id/tv_change_absolute"
-                app:layout_constraintLeft_toRightOf="@+id/tv_price"
+                app:layout_constraintStart_toEndOf="@+id/tv_price"
                 app:layout_constraintTop_toTopOf="@+id/tv_price"
                 tools:text="+1.24%" />
 

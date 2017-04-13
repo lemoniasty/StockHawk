@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Build;
 
 import com.udacity.stockhawk.Utility;
+import com.udacity.stockhawk.api.FinanceAPI;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 import com.udacity.stockhawk.ui.MainActivity;
@@ -24,7 +25,6 @@ import java.util.Set;
 
 import timber.log.Timber;
 import yahoofinance.Stock;
-import yahoofinance.YahooFinance;
 import yahoofinance.histquotes.HistoricalQuote;
 import yahoofinance.histquotes.Interval;
 import yahoofinance.quotes.stock.StockQuote;
@@ -50,68 +50,69 @@ public final class QuoteSyncJob {
         from.add(Calendar.YEAR, -YEARS_OF_HISTORY);
 
         try {
-
             Set<String> stockPref = PrefUtils.getStocks(context);
             Set<String> stockCopy = new HashSet<>();
             stockCopy.addAll(stockPref);
             String[] stockArray = stockPref.toArray(new String[stockPref.size()]);
 
             Timber.d(stockCopy.toString());
-
             if (stockArray.length == 0) {
                 return;
             }
 
-            Map<String, Stock> quotes = YahooFinance.get(stockArray);
+            //Map<String, Stock> quotes = YahooFinance.get(stockArray);
+            Map<String, Stock> quotes = FinanceAPI.get(stockArray);
             Iterator<String> iterator = stockCopy.iterator();
 
             Timber.d(quotes.toString());
-
             ArrayList<ContentValues> quoteCVs = new ArrayList<>();
-
             while (iterator.hasNext()) {
                 String symbol = iterator.next();
-                Stock stock = quotes.get(symbol);
 
-                // Determine if stock symbol is exist.
-                StockQuote quote = stock.getQuote();
-                if (quote.getPrice() != null) {
-                    float price = quote.getPrice().floatValue();
-                    float change = quote.getChange().floatValue();
-                    float percentChange = quote.getChangeInPercent().floatValue();
+                // Determine if stock symbol is exist because sometimes
+                // API can return empty line for invalid symbol...
+                if (quotes.containsKey(symbol)) {
+                    Stock stock = quotes.get(symbol);
+                    StockQuote quote = stock.getQuote();
 
-                    // WARNING! Don't request historical data for a stock that doesn't exist!
-                    // The request will hang forever X_x
-                    List<HistoricalQuote> history = stock.getHistory(from, to, Interval.WEEKLY);
+                    // ... and sometimes an library can build invalid object.
+                    if (quote.getPrice() != null) {
+                        float price = quote.getPrice().floatValue();
+                        float change = quote.getChange().floatValue();
+                        float percentChange = quote.getChangeInPercent().floatValue();
 
-                    StringBuilder historyBuilder = new StringBuilder();
-                    for (HistoricalQuote it : history) {
-                        historyBuilder.append(it.getDate().getTimeInMillis());
-                        historyBuilder.append(", ");
-                        historyBuilder.append(it.getClose());
-                        historyBuilder.append("\n");
+                        // WARNING! Don't request historical data for a stock that doesn't exist!
+                        // The request will hang forever X_x
+                        List<HistoricalQuote> history = stock.getHistory(from, to, Interval.WEEKLY);
+                        StringBuilder historyBuilder = new StringBuilder();
+                        for (HistoricalQuote it : history) {
+                            historyBuilder.append(it.getDate().getTimeInMillis());
+                            historyBuilder.append(", ");
+                            historyBuilder.append(it.getClose());
+                            historyBuilder.append("\n");
+                        }
+
+                        ContentValues quoteCV = new ContentValues();
+                        quoteCV.put(Contract.Quote.COLUMN_SYMBOL, symbol);
+                        quoteCV.put(Contract.Quote.COLUMN_PRICE, price);
+                        quoteCV.put(Contract.Quote.COLUMN_PERCENTAGE_CHANGE, percentChange);
+                        quoteCV.put(Contract.Quote.COLUMN_ABSOLUTE_CHANGE, change);
+                        quoteCV.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
+
+                        quoteCVs.add(quoteCV);
+                        continue;
                     }
-
-                    ContentValues quoteCV = new ContentValues();
-                    quoteCV.put(Contract.Quote.COLUMN_SYMBOL, symbol);
-                    quoteCV.put(Contract.Quote.COLUMN_PRICE, price);
-                    quoteCV.put(Contract.Quote.COLUMN_PERCENTAGE_CHANGE, percentChange);
-                    quoteCV.put(Contract.Quote.COLUMN_ABSOLUTE_CHANGE, change);
-
-                    quoteCV.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
-
-                    quoteCVs.add(quoteCV);
-                } else {
-                    // If stock symbol does not exists... remove it from preferences.
-                    // We don't need to cleanup database, because we did not put there
-                    // any data when it is not exist ;)
-                    PrefUtils.removeStock(context, symbol);
-
-                    // Send broadcast about invalid quote.
-                    Intent invalidData = new Intent(MainActivity.ACTION_QUOTE_INVALID);
-                    invalidData.putExtra(MainActivity.ACTION_QUOTE_SYMBOL, symbol);
-                    context.sendBroadcast(invalidData);
                 }
+
+                // If stock symbol does not exists... remove it from preferences.
+                // We don't need to cleanup database, because we did not put there
+                // any data when it is not exist ;)
+                PrefUtils.removeStock(context, symbol);
+
+                // Send broadcast about invalid quote.
+                Intent invalidData = new Intent(MainActivity.ACTION_QUOTE_INVALID);
+                invalidData.putExtra(MainActivity.ACTION_QUOTE_SYMBOL, symbol);
+                context.sendBroadcast(invalidData);
             }
 
             context.getContentResolver()
